@@ -1,14 +1,14 @@
 using UnityEngine;
 
-public class Player_Y : MonoBehaviour
+public class Player : MonoBehaviour
 {
-    public InventoryUI_Y inventoryUI;
-    public Inventory_Y inventory;
+    public InventoryUI inventoryUI;
+    public Inventory inventory;
 
     private void Awake()
     {
-        inventory = new Inventory_Y();
-        foreach (EquipSlot_X slot in FindObjectsOfType<EquipSlot_X>()) { slot.inventory = inventory; }
+        inventory = new Inventory();
+        foreach (EquipSlot slot in FindObjectsOfType<EquipSlot>()) { slot.inventory = inventory; }
         inventoryUI.SetInventory(inventory);
     }
 
@@ -30,14 +30,14 @@ public class Player_Y : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.GetComponent<ItemWorld_Y>() != null)
+        if (collision.GetComponent<ItemWorld>() != null)
         {
             PickUpItem(collision);
         }
     }
     void PickUpItem(Collider2D collision)
     {
-        ItemWorld_Y itemWorld = collision.GetComponent<ItemWorld_Y>();
+        ItemWorld itemWorld = collision.GetComponent<ItemWorld>();
         inventory.AddItem(itemWorld.id, itemWorld.ammount);
         Destroy(collision.gameObject);
     }

@@ -3,18 +3,18 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class EquipSlot_X : SlotUI_X
+public class EquipSlot : SlotUI
 {
     public event EventHandler<OnItemDropedEventArgs> OnItemDropped;
     public class OnItemDropedEventArgs : EventArgs
     {
-        public Item_Y item;
+        public Item item;
     }
 
     public Sprite placeholder;
-    public GlobalClass_Y.ItemType slotType;
+    public GlobalClass.ItemType slotType;
 
-    public Inventory_Y inventory;
+    public Inventory inventory;
 
     public Image image;
     //Color placeholderColor;
@@ -23,7 +23,7 @@ public class EquipSlot_X : SlotUI_X
     {
         image = transform.GetChild(0).GetComponent<Image>();
         image.sprite = placeholder;
-        GlobalClass_Y.equipSlot = this;
+        GlobalClass.equipSlot = this;
         //placeholderColor = GetComponent<Image>().color;
     }
     public void SetDefault()

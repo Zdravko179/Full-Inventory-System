@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NoramlSlot_X : SlotUI_X
+public class NoramlSlot : SlotUI
 {
     public int slotIndex;
-    Inventory_Y inventory;
+    Inventory inventory;
     static int draggedslotIndex;
 
 
-    public void SetInventory(Inventory_Y inventory) => this.inventory = inventory;
+    public void SetInventory(Inventory inventory) => this.inventory = inventory;
     public override void StartDrag()
     {
         draggedslotIndex = slotIndex;

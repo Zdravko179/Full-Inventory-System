@@ -1,19 +1,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemDatabase_Y : MonoBehaviour
+public class ItemDatabase : MonoBehaviour
 {
-    public static ItemDatabase_Y Instance { get; private set; }
+    public static ItemDatabase Instance { get; private set; }
 
 
-    private List<ItemZ> database = new List<ItemZ>();
+    private List<ItemData> database = new List<ItemData>();
     public Object[] itemDatas { get; private set; }
 
 
     private void Awake()
     {
         Instance = this;
-        itemDatas = Resources.LoadAll("ItemsZ", typeof(ScriptableObject));
+        itemDatas = Resources.LoadAll("Items", typeof(ScriptableObject));
         ConstructItemDatabase();
         foreach (Object itemData in itemDatas)
         {
@@ -21,7 +21,7 @@ public class ItemDatabase_Y : MonoBehaviour
         }
     }
 
-    public ItemZ FetchItemById(int id)
+    public ItemData FetchItemById(int id)
     {
         for (int i = 0; i < database.Count; i++)
         {
@@ -36,7 +36,7 @@ public class ItemDatabase_Y : MonoBehaviour
     {
         for (int i = 0; i < itemDatas.Length; i++)
         {
-            ItemZ newItem = (ItemZ)itemDatas[i];
+            ItemData newItem = (ItemData)itemDatas[i];
             newItem.id = i;
             database.Add(newItem);
         }

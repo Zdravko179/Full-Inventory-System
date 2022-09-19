@@ -2,9 +2,9 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class ItemIcon_Y : MonoBehaviour
+public class DraggedItem : MonoBehaviour
 {
-    public static ItemIcon_Y Instance;
+    public static DraggedItem Instance;
     Image image;
     private void Awake()
     {

@@ -4,23 +4,23 @@ using UnityEngine;
 
 public class CharacterEquipment : MonoBehaviour
 {
-    private Item_Y head, body, hands, accesory;
+    private Item head, body, hands, accesory;
 
     public void TryEquipHead()
     {
-        head = GlobalClass_Y.item;
+        head = GlobalClass.item;
     }
     public void TryEquipBody()
     {
-        body = GlobalClass_Y.item;
+        body = GlobalClass.item;
     }
     public void TryEquipHands()
     {
-        hands = GlobalClass_Y.item;
+        hands = GlobalClass.item;
     }
     public void TryEquipAccesory()
     {
-        accesory = GlobalClass_Y.item;
+        accesory = GlobalClass.item;
     }
 
 }

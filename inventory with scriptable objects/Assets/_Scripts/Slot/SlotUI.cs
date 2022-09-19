@@ -2,9 +2,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public abstract class SlotUI_X : MonoBehaviour, IPointerDownHandler
+public abstract class SlotUI : MonoBehaviour, IPointerDownHandler
 {
-    public Item_Y item;
+    public Item item;
     private static GameObject itemUI; //only to set transparency
 
 
@@ -14,17 +14,17 @@ public abstract class SlotUI_X : MonoBehaviour, IPointerDownHandler
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            if (!GlobalClass_Y.dragging) //start drag
+            if (!GlobalClass.dragging) //start drag
             {
                 if (item == null) return;
 
                 itemUI = transform.GetChild(0).gameObject;
                 itemUI.GetComponent<Image>().color = new Color(1, 1, 1, 0.2f);
 
-                GlobalClass_Y.item = item;
-                GlobalClass_Y.dragging = true;
+                GlobalClass.item = item;
+                GlobalClass.dragging = true;
 
-                ItemIcon_Y.Instance.Activate(item.soItem.sprite);
+                DraggedItem.Instance.Activate(item.data.sprite);
 
                 StartDrag();
             }
@@ -33,17 +33,17 @@ public abstract class SlotUI_X : MonoBehaviour, IPointerDownHandler
                 //this shoud be done only if item can go in that slot or can swap
                 if (itemUI != null) itemUI.GetComponent<Image>().color = new Color(1, 1, 1, 1);
 
-                item = GlobalClass_Y.item;
-                GlobalClass_Y.item = null;
-                GlobalClass_Y.dragging = false;
+                item = GlobalClass.item;
+                GlobalClass.item = null;
+                GlobalClass.dragging = false;
 
-                ItemIcon_Y.Instance.Deactivate();
+                DraggedItem.Instance.Deactivate();
 
                 EndDrag();
             }
         }
 
-        if (GlobalClass_Y.dragging) return;
+        if (GlobalClass.dragging) return;
 
         if (eventData.button == PointerEventData.InputButton.Right)
         {
@@ -56,11 +56,11 @@ public abstract class SlotUI_X : MonoBehaviour, IPointerDownHandler
     }
     void CancelDrag()
     {
-        if (GlobalClass_Y.dragging && Input.GetMouseButtonDown(1) && GlobalClass_Y.item != null) //cancel dragging on right click
+        if (GlobalClass.dragging && Input.GetMouseButtonDown(1) && GlobalClass.item != null) //cancel dragging on right click
         {
             if (itemUI != null) itemUI.GetComponent<Image>().color = new Color(1, 1, 1, 1);
-            ItemIcon_Y.Instance.Deactivate();
-            GlobalClass_Y.dragging = false;
+            DraggedItem.Instance.Deactivate();
+            GlobalClass.dragging = false;
         }
     }
 }

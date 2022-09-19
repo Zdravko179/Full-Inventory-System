@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class GlobalClass_Y : MonoBehaviour
+public class GlobalClass : MonoBehaviour
 {
     public enum ItemType
     {
@@ -14,12 +14,12 @@ public class GlobalClass_Y : MonoBehaviour
     }
     public static ItemType itemType;
 
-    public static Inventory_Y inventory;
-    public static Item_Y item;
+    public static Inventory inventory;
+    public static Item item;
     public static bool dragging;
 
     public static bool movedFromInventory;
-    public static EquipSlot_X equipSlot;
+    public static EquipSlot equipSlot;
 
     private void Awake()
     {

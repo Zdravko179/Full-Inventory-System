@@ -2,9 +2,9 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 
-public class TooltipZ : MonoBehaviour
+public class Tooltip : MonoBehaviour
 {
-	private ItemZ item;
+	private Item item;
 	private string data;
 	private GameObject tooltip;
 
@@ -22,7 +22,7 @@ public class TooltipZ : MonoBehaviour
 		}
 	}
 
-	public void Activate(ItemZ item)
+	public void Activate(Item item)
 	{
 		this.item = item;
 		ConstructDataString();
@@ -36,8 +36,8 @@ public class TooltipZ : MonoBehaviour
 
 	public void ConstructDataString()
 	{
-		data = "<color=#FFEC58FF><b>" + item.name + "</b></color>\n\n" + item.description
-			+ "\nPower: " + item.damageAmount;
+		data = "<color=#FFEC58FF><b>" + item.data.name + "</b></color>\n\n" + item.data.description
+			+ "\nPower: " + item.data.damageAmount;
 		tooltip.transform.GetChild(0).GetComponent<Text>().text = data;
 	}
 
