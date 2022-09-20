@@ -19,7 +19,7 @@ public class GlobalClass : MonoBehaviour
     public static bool dragging;
 
     public static bool movedFromInventory;
-    public static EquipSlot equipSlot;
+    //public static EquipSlotUI equipSlot;
 
     private void Awake()
     {

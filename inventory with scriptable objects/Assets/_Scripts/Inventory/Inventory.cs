@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class Inventory
 {
-    public List<Item> itemList = new List<Item>();
+    private List<Item> itemList = new List<Item>();
     public event EventHandler OnItemListChanged;
 
-    
-    public void AddItem(int id) => AddItem(id, 1);
-    public void AddItem(int id, int ammount)
+
+    public List<Item> GetItemList()
+    {
+        return itemList;
+    }
+    public void AddItemById(int id) => AddItemById(id, 1);
+    public void AddItemById(int id, int ammount)
     {
         if (itemList.Count >= 20) Debug.Log("Invetory Full, Can't Add More Items");
         if (ammount > ItemDatabase.Instance.FetchItemById(id).stackLimit)
@@ -32,24 +36,24 @@ public class Inventory
 
         if (ammount != 0) //add new stack
         {
-            Item item = new Item();
+            Item newItem = new Item();
             for (int i = 0; i < 20; i++) //set index to 1st index that doesn't exsist
             {
                 bool found = false;
-                foreach (Item it in itemList)
+                foreach (Item item in itemList)
                 {
-                    if (it.index == i) found = true;
+                    if (item.position == i) found = true;
                 }
                 if (!found)
                 {
-                    item.index = i;
+                    newItem.position = i;
                     break;
                 }
             }
             if (ItemDatabase.Instance.FetchItemById(id) == null) Debug.Log("Item not found in database");
-            else item.data = ItemDatabase.Instance.FetchItemById(id);
-            item.ammount = ammount;
-            itemList.Add(item);
+            else newItem.data = ItemDatabase.Instance.FetchItemById(id);
+            newItem.ammount = ammount;
+            itemList.Add(newItem);
         }
 
         OnItemListChanged?.Invoke(this, EventArgs.Empty);
@@ -57,26 +61,32 @@ public class Inventory
     public Item AddItemAt(Item item, int index)
     {
         itemList.Add(item);
-        item.index = index;
+        item.position = index;
 
         OnItemListChanged?.Invoke(this, EventArgs.Empty);
 
         return item;
-    }/*
-    public void MoveItem(Item_Y oldItem, int newIndex)
-    {
-        MoveItem(oldItem, null, 0, newIndex);
     }
-    public void MoveItem(Item_Y oldItem, Item_Y newItem, int oldIndex, int newIndex)
+    void AddItem(Item item, int position)
     {
-        oldItem.index = newIndex;
-        if (newItem != null) newItem.index = oldIndex;
+        itemList.Add(item);
+        item.position = position;
+    }
+    public void RemoveItem(Item item)
+    {
+        itemList.Remove(item);
 
         OnItemListChanged?.Invoke(this, EventArgs.Empty);
     }
-    public void RemoveItem(Item_Y item)
+    /*
+    public void MoveItem(Item oldItem, int newIndex)
     {
-        itemList.Remove(item);
+        MoveItem(oldItem, null, 0, newIndex);
+    }
+    public void MoveItem(Item oldItem, Item_Y newItem, int oldIndex, int newIndex)
+    {
+        oldItem.index = newIndex;
+        if (newItem != null) newItem.index = oldIndex;
 
         OnItemListChanged?.Invoke(this, EventArgs.Empty);
     }*/
@@ -88,7 +98,7 @@ public class Inventory
 }
 public class Item
 {
-    public int index { get; set; }
-    public ItemData data { get; set; }
-    public int ammount { get; set; }
+    public int position;
+    public ItemData data;
+    public int ammount;
 }

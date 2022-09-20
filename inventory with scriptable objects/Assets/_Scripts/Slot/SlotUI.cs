@@ -2,14 +2,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public abstract class SlotUI : MonoBehaviour, IPointerDownHandler
-{
+public abstract class SlotUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler
+{ 
     public Item item;
     private static GameObject itemUI; //only to set transparency
 
 
     public abstract void StartDrag(); public abstract void EndDrag();
-    public abstract void SetSlotItem(); public abstract void DeleteSlotItem();
     public void OnPointerDown(PointerEventData eventData)
     {
         if (eventData.button == PointerEventData.InputButton.Left)
@@ -30,11 +29,8 @@ public abstract class SlotUI : MonoBehaviour, IPointerDownHandler
             }
             else //end drag
             {
-                //this shoud be done only if item can go in that slot or can swap
                 if (itemUI != null) itemUI.GetComponent<Image>().color = new Color(1, 1, 1, 1);
 
-                item = GlobalClass.item;
-                GlobalClass.item = null;
                 GlobalClass.dragging = false;
 
                 DraggedItem.Instance.Deactivate();
@@ -62,5 +58,17 @@ public abstract class SlotUI : MonoBehaviour, IPointerDownHandler
             DraggedItem.Instance.Deactivate();
             GlobalClass.dragging = false;
         }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (item == null) return;
+        Tooltip.Instance.Activate(item);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (item == null) return;
+        Tooltip.Instance.Deactivate();
     }
 }

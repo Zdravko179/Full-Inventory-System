@@ -8,7 +8,7 @@ public class InventoryUI : MonoBehaviour
     public GameObject pfSlot, pfItem;
 
     int numberOfSlots, rowSize;
-    Inventory inventory;
+    public Inventory inventory;
 
     public void SetInventory(Inventory inventory)
     {
@@ -35,12 +35,12 @@ public class InventoryUI : MonoBehaviour
         for (int i = 0; i < numberOfSlots; i++) //create slots
         {
             slotUI = Instantiate(pfSlot, SlotPanel);
-            slotUI.GetComponent<NoramlSlot>().slotIndex = i;
-            slotUI.GetComponent<NoramlSlot>().SetInventory(inventory);
+            slotUI.GetComponent<InventorySlotUI>().slotIndex = i;
+            slotUI.GetComponent<InventorySlotUI>().SetInventory(inventory);
             slotsUI[i] = slotUI;
-            foreach (Item item in inventory.itemList) //create items
+            foreach (Item item in inventory.GetItemList()) //create items
             {
-                if (item.index == i)
+                if (item.position == i)
                 {
                     slotUI.GetComponent<SlotUI>().item = item;
                     GameObject instanceItem = Instantiate(pfItem, slotUI.transform);
@@ -81,7 +81,6 @@ public class InventoryUI : MonoBehaviour
                 {
                     slotsUI[j].SetActive(false);
                 }
-                
             }
         }
     }

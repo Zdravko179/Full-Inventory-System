@@ -4,13 +4,19 @@ using UnityEngine.UI;
 
 public class Tooltip : MonoBehaviour
 {
+	public static Tooltip Instance;
+
 	private Item item;
 	private string data;
 	private GameObject tooltip;
 
-	void Start()
+    private void Awake()
+    {
+		Instance = this;
+    }
+    void Start()
 	{
-		tooltip = GameObject.Find("TooltipZ");
+		tooltip = GameObject.Find("Tooltip UI");
 		tooltip.SetActive(false);
 	}
 

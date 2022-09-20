@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class EquipSlot : SlotUI
+public class EquipSlotUI : SlotUI, IItem
 {
     public event EventHandler<OnItemDropedEventArgs> OnItemDropped;
     public class OnItemDropedEventArgs : EventArgs
@@ -14,16 +14,18 @@ public class EquipSlot : SlotUI
     public Sprite placeholder;
     public GlobalClass.ItemType slotType;
 
-    public Inventory inventory;
+    public Equipment equipment;
 
     public Image image;
     //Color placeholderColor;
 
+
+    public void SetEquipment(Equipment equipment) => this.equipment = equipment;
     private void Start()
     {
         image = transform.GetChild(0).GetComponent<Image>();
         image.sprite = placeholder;
-        GlobalClass.equipSlot = this;
+        //GlobalClass.equipSlot = this;
         //placeholderColor = GetComponent<Image>().color;
     }
     public void SetDefault()
@@ -37,23 +39,20 @@ public class EquipSlot : SlotUI
     {
     }
     public override void EndDrag() 
-    {/*
-        if (GlobalClass_Y.item.soItem.itemType == slotType)
+    {
+        if (slotType == GlobalClass.item.data.itemType)
         {
-            inventory.RemoveItem(GlobalClass_Y.item);
-
-            item = GlobalClass_Y.item;
-            image.color = new Color(1, 1, 1, 1);
-            image.sprite = GlobalClass_Y.item.soItem.sprite;
-        }*/
+            equipment.EquipItem(item);
+        }
+        
         OnItemDropped?.Invoke(this, new OnItemDropedEventArgs { item = item });
     }
-    public override void SetSlotItem()
+    public void AddItem(Item item)
     {
-        
+
     }
-    public override void DeleteSlotItem()
+    public void RemoveItem(Item item)
     {
-        
+
     }
 }

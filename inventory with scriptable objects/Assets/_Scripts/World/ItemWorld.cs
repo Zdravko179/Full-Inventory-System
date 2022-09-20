@@ -12,4 +12,8 @@ public class ItemWorld : MonoBehaviour
         GetComponent<SpriteRenderer>().sprite = ItemDatabase.Instance.FetchItemById(id).sprite;
         //if (ammount > item.soItem.stackLimit) ammount = item.soItem.stackLimit;
     }
+    public ItemWorld()
+    {
+
+    }
 }
