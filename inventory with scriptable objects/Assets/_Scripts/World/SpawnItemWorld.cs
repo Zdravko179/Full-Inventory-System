@@ -5,10 +5,16 @@ using UnityEngine;
 public class SpawnItemWorld : MonoBehaviour
 {
     [SerializeField] private GameObject target;
-    [SerializeField] private float radius;
+    [SerializeField] private float minRadius, maxRadius;
     [SerializeField] private GameObject itemWorld;
 
+    public static SpawnItemWorld Instance;
 
+
+    private void Awake()
+    {
+        Instance = this;
+    }
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
@@ -16,12 +22,29 @@ public class SpawnItemWorld : MonoBehaviour
             int ammount = 5;
             for (int i = 0; i < ammount; i++)
             {
-                int angle = Random.Range(0, 360);
-                Vector3 newPos = new Vector3(Mathf.Cos(Random.Range(0, 360)) * radius, Mathf.Sin(Random.Range(0, 360)) * radius) + target.transform.position;
-                ItemWorld item = Instantiate(itemWorld, newPos, Quaternion.identity).GetComponent<ItemWorld>(); //{ item.id = 1; item.ammount = 1; }
-                item.id = Random.Range(0, ItemDatabase.Instance.itemDatas.Length);
-                item.ammount = Random.Range(0, 10);
+                ItemWorld newItem = SpanwNewItem();
+                newItem.id = Random.Range(0, ItemDatabase.Instance.itemDatas.Length);
+                newItem.ammount = Random.Range(0, 10);
             }
         }
+    }
+
+    public void DropItem(Item item)
+    {
+        ItemWorld newItem = SpanwNewItem();
+        newItem.id = item.data.id;
+        newItem.ammount = item.ammount;
+    }
+
+    ItemWorld SpanwNewItem()
+    {
+        ItemWorld newItem = Instantiate(itemWorld, RandomDropLocation(), Quaternion.identity).GetComponent<ItemWorld>();
+        return newItem;
+    }
+    Vector3 RandomDropLocation()
+    {
+        int angle = Random.Range(0, 360);
+        Vector3 newPos = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle)) * Random.Range(minRadius, maxRadius) + target.transform.position;
+        return newPos;
     }
 }

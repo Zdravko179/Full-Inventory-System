@@ -47,6 +47,7 @@ public class InventorySlotUI : SlotUI
     }
     protected override void DropItem()
     {
+        SpawnItemWorld.Instance.DropItem(item);
         inventory.RemoveItem(item);
     }
     public override void ConsumeItem()

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class ButtonsUI : MonoBehaviour
 {
@@ -8,31 +9,47 @@ public class ButtonsUI : MonoBehaviour
     Player player;
 
     public void SetPlayer(Player player) => this.player = player;
-    public void _Activation(GameObject obj)
-    {
-        obj.SetActive(obj.activeSelf ? false : true);
-    }
+   
     public void _SortItems() {
         player.inventory.SortItems();
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.I))
+        if (Input.GetKeyDown(KeyCode.I)) InventoryUI();
+        if (Input.GetKeyDown(KeyCode.O)) EquipUI();
+        if (Input.GetKeyDown(KeyCode.P)) StatsUI();
+    }
+    public void InventoryUI()
+    {
+        ShowHide(inventory);
+
+        inventory.GetComponent<InventoryUI>().OnEnableRefresh();
+        equipment.GetComponent<EquipUI>().OnEnableRefresh();
+    }
+    public void EquipUI()
+    {
+        ShowHide(equipment);
+
+        inventory.GetComponent<InventoryUI>().OnEnableRefresh();
+        equipment.GetComponent<EquipUI>().OnEnableRefresh();
+    }
+    public void StatsUI()
+    {
+        ShowHide(stats);
+    }
+
+    void ShowHide(GameObject obj)
+    {
+        if (obj.transform.localScale.x == 0)//show
         {
-            inventory.SetActive(inventory.activeSelf ? false : true);
-            inventory.GetComponent<InventoryUI>().OnEnableRefresh();
-            equipment.GetComponent<EquipUI>().OnEnableRefresh();
+            obj.transform.localScale = Vector3.zero;
+            obj.transform.DOScale(1, 0.1f).SetEase(Ease.OutSine);
         }
-        if (Input.GetKeyDown(KeyCode.O))
+        if (obj.transform.localScale.x == 1)//hide
         {
-            equipment.SetActive(equipment.activeSelf ? false : true);
-            inventory.GetComponent<InventoryUI>().OnEnableRefresh();
-            equipment.GetComponent<EquipUI>().OnEnableRefresh();
-        }
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            stats.SetActive(stats.activeSelf ? false : true);
+            obj.transform.localScale = Vector3.one;
+            obj.transform.DOScale(0, 0.1f).SetEase(Ease.InSine);
         }
     }
 }

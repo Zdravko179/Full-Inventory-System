@@ -47,6 +47,7 @@ public abstract class SlotUI : MonoBehaviour, IPointerDownHandler, IPointerEnter
 
         if (Input.GetKey(KeyCode.LeftControl) && eventData.button == PointerEventData.InputButton.Right)
         {
+            if (item == null) return;
             DropItem();
             Tooltip.Instance.Deactivate();
         }
