@@ -2,11 +2,15 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    private Inventory inventory;
+    public Inventory inventory;
     public InventoryUI inventoryUI;
 
     private Equipment equipment;
     public EquipUI equipmentUI;
+
+    public StatsUI statsUI;
+
+    public ButtonsUI buttons;
 
     public float speed;
 
@@ -17,6 +21,10 @@ public class Player : MonoBehaviour
 
         equipment = new Equipment();
         equipmentUI.SetEquipment(equipment);
+
+        statsUI.SetEquipment(equipment);
+
+        buttons.SetPlayer(this);
     }
 
     private void Start()
@@ -39,7 +47,7 @@ public class Player : MonoBehaviour
     {
         if (collision.GetComponent<ItemWorld>() != null)
         {
-            PickUpItem(collision);
+            if(!inventory.InventoryFull()) PickUpItem(collision);
         }
     }
     void PickUpItem(Collider2D collision)
@@ -50,10 +58,22 @@ public class Player : MonoBehaviour
     }
     private void Update()
     {
+        MovementAndAnimaiton();
+    }
+    void MovementAndAnimaiton()
+    {
         float x = Input.GetAxis("Horizontal");
         float y = Input.GetAxis("Vertical");
         Vector3 movDir = new Vector3(x, y, 0).normalized;
 
         transform.position += movDir * speed * Time.deltaTime;
+
+        Animator an = GetComponent<Animator>();
+
+        if (movDir.y > 0.01f) an.Play("Up");
+        else if (movDir.y < -0.01f) an.Play("Down");
+        else if (movDir.x > 0.01f) an.Play("Right");
+        else if (movDir.x < -0.01f) an.Play("Left");
+        else an.Play("Idle");
     }
 }

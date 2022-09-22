@@ -5,10 +5,14 @@ using UnityEngine.EventSystems;
 public abstract class SlotUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler
 { 
     public Item item;
-    private static GameObject itemUI; //only to set transparency
+    protected static GameObject itemUI; //only to set transparency
+
+    protected static Inventory fromInventory = null;
+    protected static Equipment fromEquipment = null; 
 
 
-    public abstract void StartDrag(); public abstract void EndDrag();
+    public abstract void StartDrag(); public abstract void EndDrag(); protected abstract void DropItem();
+    public abstract void ConsumeItem();
     public void OnPointerDown(PointerEventData eventData)
     {
         if (eventData.button == PointerEventData.InputButton.Left)
@@ -41,18 +45,28 @@ public abstract class SlotUI : MonoBehaviour, IPointerDownHandler, IPointerEnter
 
         if (GlobalClass.dragging) return;
 
-        if (eventData.button == PointerEventData.InputButton.Right)
+        if (Input.GetKey(KeyCode.LeftControl) && eventData.button == PointerEventData.InputButton.Right)
         {
-            //inventory.RemoveItem(item);
+            DropItem();
+            Tooltip.Instance.Deactivate();
+        }
+
+        if (eventData.button == PointerEventData.InputButton.Middle)
+        {
+            if (item.data.itemType == GlobalClass.ItemType.Usable)
+            {
+                ConsumeItem();
+                Tooltip.Instance.Deactivate();
+            }
         }
     }
     private void Update()
     {
-        //CancelDrag();   
+        if (Input.GetMouseButtonDown(1)) CancelDrag();   
     }
     void CancelDrag()
     {
-        if (GlobalClass.dragging && Input.GetMouseButtonDown(1) && GlobalClass.item != null) //cancel dragging on right click
+        if (GlobalClass.dragging && GlobalClass.item != null) //cancel dragging on right click
         {
             if (itemUI != null) itemUI.GetComponent<Image>().color = new Color(1, 1, 1, 1);
             DraggedItem.Instance.Deactivate();

@@ -13,11 +13,15 @@ public class SpawnItemWorld : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            int angle = Random.Range(0, 360);
-            Vector3 newPos = new Vector3(Mathf.Cos(Random.Range(0, 360)) * radius, Mathf.Sin(Random.Range(0, 360)) * radius) + target.transform.position;
-            ItemWorld item = Instantiate(itemWorld, newPos, Quaternion.identity).GetComponent<ItemWorld>(); //{ item.id = 1; item.ammount = 1; }
-            item.id = Random.Range(0, ItemDatabase.Instance.itemDatas.Length);
-            item.ammount = Random.Range(0, 10);
+            int ammount = 5;
+            for (int i = 0; i < ammount; i++)
+            {
+                int angle = Random.Range(0, 360);
+                Vector3 newPos = new Vector3(Mathf.Cos(Random.Range(0, 360)) * radius, Mathf.Sin(Random.Range(0, 360)) * radius) + target.transform.position;
+                ItemWorld item = Instantiate(itemWorld, newPos, Quaternion.identity).GetComponent<ItemWorld>(); //{ item.id = 1; item.ammount = 1; }
+                item.id = Random.Range(0, ItemDatabase.Instance.itemDatas.Length);
+                item.ammount = Random.Range(0, 10);
+            }
         }
     }
 }

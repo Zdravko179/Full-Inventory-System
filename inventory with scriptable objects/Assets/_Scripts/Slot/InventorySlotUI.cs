@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InventorySlotUI : SlotUI, IItem
+public class InventorySlotUI : SlotUI
 {
     public int slotIndex;
     Inventory inventory;
@@ -13,25 +13,44 @@ public class InventorySlotUI : SlotUI, IItem
     public override void StartDrag()
     {
         draggedSlotIndex = slotIndex;
+
+        fromInventory = inventory;
+        fromEquipment = null;
     }
     public override void EndDrag() 
     {
         if (item == null) //not swap
         {
-            inventory.AddItemAt(GlobalClass.item, slotIndex);
+            if (fromEquipment != null)
+            {
+                inventory.AddItemAt(GlobalClass.item, slotIndex);
+                fromEquipment.Unequip(GlobalClass.item);
+            }
+            if (fromInventory != null)
+            {
+                inventory.RemoveItem(GlobalClass.item);
+                inventory.AddItemAt(GlobalClass.item, slotIndex);
+            }
         }
         else //swap
         {
-            inventory.AddItemAt(item, draggedSlotIndex);
-            inventory.AddItemAt(GlobalClass.item, slotIndex);
+            if (fromEquipment != null) return; //prevent swaping when dragging from eqipment to inventory
+            if (fromInventory != null)
+            {
+                Item thisItem = inventory.RemoveItem(item);
+                inventory.AddItemAt(thisItem, draggedSlotIndex);
+
+                inventory.RemoveItem(GlobalClass.item);
+                inventory.AddItemAt(GlobalClass.item, slotIndex);
+            }
         }
     }
-    public void AddItem(Item item)
+    protected override void DropItem()
     {
-
+        inventory.RemoveItem(item);
     }
-    public void RemoveItem(Item item)
+    public override void ConsumeItem()
     {
-
+        inventory.ConsumeItem(item);
     }
 }

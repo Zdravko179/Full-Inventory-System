@@ -42,9 +42,18 @@ public class Tooltip : MonoBehaviour
 
 	public void ConstructDataString()
 	{
-		data = "<color=#FFEC58FF><b>" + item.data.name + "</b></color>\n\n" + item.data.description
-			+ "\nPower: " + item.data.damageAmount;
+		if (item.data.itemType == GlobalClass.ItemType.Helmet || item.data.itemType == GlobalClass.ItemType.BodyArmour || item.data.itemType == GlobalClass.ItemType.Gauntlet || item.data.itemType == GlobalClass.ItemType.Accesory)
+        {
+			data = "<color=#FFEC58FF><b>" + item.data.name + "</b></color>\n\n" + item.data.description
+				+ "\nPower: " + item.data.power
+				+ "\nDefense: " + item.data.defense
+				+ "\nAgility: " + item.data.agility
+				+ "\nLuck: " + item.data.luck;
+        }
+        else
+        {
+			data = "<color=#FFEC58FF><b>" + item.data.name + "</b></color>\n\n" + item.data.description;
+		}
 		tooltip.transform.GetChild(0).GetComponent<Text>().text = data;
 	}
-
 }

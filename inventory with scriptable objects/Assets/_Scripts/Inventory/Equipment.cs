@@ -1,13 +1,13 @@
 using System;
 using UnityEngine;
 
-public class Equipment : MonoBehaviour
+public class Equipment
 {
     public Item head, body, hands, accesory;
     public event EventHandler OnItemListChanged;
 
    
-    public void EquipItem(Item item)
+    public void Equip(Item item)
     {
         switch (item.data.itemType)
         {
@@ -22,6 +22,26 @@ public class Equipment : MonoBehaviour
                 break;
             case GlobalClass.ItemType.Accesory:
                 accesory = item;
+                break;
+        }
+
+        OnItemListChanged?.Invoke(this, EventArgs.Empty);
+    }
+    public void Unequip(Item item)
+    {
+        switch (item.data.itemType)
+        {
+            case GlobalClass.ItemType.Helmet:
+                head = null;
+                break;
+            case GlobalClass.ItemType.BodyArmour:
+                body = null;
+                break;
+            case GlobalClass.ItemType.Gauntlet:
+                hands = null;
+                break;
+            case GlobalClass.ItemType.Accesory:
+                accesory = null;
                 break;
         }
 

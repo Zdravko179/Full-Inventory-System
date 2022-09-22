@@ -20,11 +20,28 @@ public class InventoryUI : MonoBehaviour
 
     }
 
+    private void Update()
+    {
+        if (Input.GetKey(KeyCode.C)) inventory.ClearInventory();
+    }
+
     private void OnItemListChanged(object sender, EventArgs e) => RefreshInventory();
+    public void OnEnableRefresh()
+    {
+        if (GlobalClass.dragging)
+        {
+            RefreshInventory();
+            DraggedItem.Instance.Deactivate();
+            Tooltip.Instance.Deactivate();
+            GlobalClass.dragging = false;
+        }
+    }
 
     void RefreshInventory()
     {
+
         //-----------------------REMOVE OLD SLOTS------------------------//
+        //Debug.LogWarning($"Number of items in invntory: {inventory.GetItemList().Count}");
         foreach (Transform slot in SlotPanel) //remove old
         {
             Destroy(slot.gameObject);
@@ -59,21 +76,20 @@ public class InventoryUI : MonoBehaviour
         {
             slotsUI[i]?.SetActive(true);
         }
+        int itemsInRow = 0;
         for (int i=numberOfSlots-1; i>=0; i--)
         {
-            int itemsInRow = 0;
             if (slotsUI[i].GetComponent<SlotUI>().item != null) itemsInRow++;
             if (i % 4 == 0)
             {
-                if (itemsInRow != 0) break; //ckeck if item in row
+                if (itemsInRow > 0) break; //ckeck if item in row
 
                 int otherEmptySlots = 0;
                 for(int j=i-1; j>=0; j--) //check if any more empty slots
                 {
                     //Debug.Log("check " + j);
-                    if (slotsUI[i].GetComponent<SlotUI>().item == null) otherEmptySlots++;
+                    if (slotsUI[j].GetComponent<SlotUI>().item == null) otherEmptySlots++;
                 }
-                //Debug.LogWarning(otherEmptySlots);
 
                 if (otherEmptySlots == 0) break;
 
@@ -81,6 +97,9 @@ public class InventoryUI : MonoBehaviour
                 {
                     slotsUI[j].SetActive(false);
                 }
+
+                itemsInRow = 0;
+                otherEmptySlots = 0;
             }
         }
     }

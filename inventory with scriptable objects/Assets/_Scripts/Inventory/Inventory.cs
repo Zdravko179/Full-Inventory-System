@@ -12,10 +12,26 @@ public class Inventory
     {
         return itemList;
     }
+    public bool InventoryFull()
+    {
+        if (itemList.Count >= 20) return true;
+        else return false;
+    }
+    public void SortItems()
+    {
+        itemList.Sort((p1, p2) => p1.data.id.CompareTo(p2.data.id));
+        Debug.Log("sort by id");
+
+        OnItemListChanged?.Invoke(this, EventArgs.Empty);
+    }
     public void AddItemById(int id) => AddItemById(id, 1);
     public void AddItemById(int id, int ammount)
     {
-        if (itemList.Count >= 20) Debug.Log("Invetory Full, Can't Add More Items");
+        if (itemList.Count >= 20)
+        {
+            Debug.Log("Invetory Full, Can't Add More Items " + itemList.Count);
+            return;
+        }
         if (ammount > ItemDatabase.Instance.FetchItemById(id).stackLimit)
         {
             Debug.Log("Adding more than stack limit");
@@ -67,29 +83,32 @@ public class Inventory
 
         return item;
     }
-    void AddItem(Item item, int position)
-    {
-        itemList.Add(item);
-        item.position = position;
-    }
-    public void RemoveItem(Item item)
+    public Item RemoveItem(Item item)
     {
         itemList.Remove(item);
 
         OnItemListChanged?.Invoke(this, EventArgs.Empty);
+
+        return item;
     }
-    /*
-    public void MoveItem(Item oldItem, int newIndex)
+    public void ConsumeItem(Item item)
     {
-        MoveItem(oldItem, null, 0, newIndex);
-    }
-    public void MoveItem(Item oldItem, Item_Y newItem, int oldIndex, int newIndex)
-    {
-        oldItem.index = newIndex;
-        if (newItem != null) newItem.index = oldIndex;
+        item.ammount--;
+        if (item.ammount <= 0) itemList.Remove(item);
+        Debug.Log($"Item {item.data.name} consumed!");
 
         OnItemListChanged?.Invoke(this, EventArgs.Empty);
-    }*/
+    }
+    public void ClearInventory()
+    {
+        itemList.Clear();
+
+        OnItemListChanged?.Invoke(this, EventArgs.Empty);
+    }
+    public void RefreshInventory()
+    {
+        OnItemListChanged?.Invoke(this, EventArgs.Empty);
+    }
     public int GetLength()
     {
         return itemList.Count;

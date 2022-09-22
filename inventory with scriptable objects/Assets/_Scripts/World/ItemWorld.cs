@@ -10,7 +10,7 @@ public class ItemWorld : MonoBehaviour
     private void Start()
     {
         GetComponent<SpriteRenderer>().sprite = ItemDatabase.Instance.FetchItemById(id).sprite;
-        //if (ammount > item.soItem.stackLimit) ammount = item.soItem.stackLimit;
+        if (ammount > ItemDatabase.Instance.FetchItemById(id).stackLimit) ammount = ItemDatabase.Instance.FetchItemById(id).stackLimit;
     }
     public ItemWorld()
     {

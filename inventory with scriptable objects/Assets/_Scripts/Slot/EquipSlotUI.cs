@@ -3,9 +3,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class EquipSlotUI : SlotUI, IItem
+public class EquipSlotUI : SlotUI
 {
-    public event EventHandler<OnItemDropedEventArgs> OnItemDropped;
     public class OnItemDropedEventArgs : EventArgs
     {
         public Item item;
@@ -16,43 +15,29 @@ public class EquipSlotUI : SlotUI, IItem
 
     public Equipment equipment;
 
-    public Image image;
+    //public Image image;
     //Color placeholderColor;
 
 
     public void SetEquipment(Equipment equipment) => this.equipment = equipment;
-    private void Start()
-    {
-        image = transform.GetChild(0).GetComponent<Image>();
-        image.sprite = placeholder;
-        //GlobalClass.equipSlot = this;
-        //placeholderColor = GetComponent<Image>().color;
-    }
-    public void SetDefault()
-    {
-        image = transform.GetChild(0).GetComponent<Image>();
-        image.sprite = placeholder;
-        image.color = new Color(1, 1, 1, 0.2f);
-        item = null;
-    }
+
     public override void StartDrag()
     {
+        fromInventory = null;
+        fromEquipment = equipment;
     }
     public override void EndDrag() 
     {
         if (slotType == GlobalClass.item.data.itemType)
         {
-            equipment.EquipItem(item);
+            if (fromInventory != null) fromInventory.RemoveItem(GlobalClass.item);
+            equipment.Equip(GlobalClass.item);
+            item = GlobalClass.item;
         }
-        
-        OnItemDropped?.Invoke(this, new OnItemDropedEventArgs { item = item });
     }
-    public void AddItem(Item item)
+    protected override void DropItem()
     {
-
+        equipment.Unequip(item);
     }
-    public void RemoveItem(Item item)
-    {
-
-    }
+    public override void ConsumeItem() {}
 }
