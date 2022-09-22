@@ -19,9 +19,45 @@ public class Inventory
     }
     public void SortItems()
     {
-        itemList.Sort((p1, p2) => p1.data.id.CompareTo(p2.data.id));
-        Debug.Log("sort by id");
+        Debug.Log("try sort");
 
+        List<Item> newItemList = new List<Item>();
+        newItemList = itemList;
+        Debug.Log("new item list length: " + newItemList.Count);
+        itemList.Clear();
+        Debug.Log("new item list length: " + newItemList.Count);
+
+        int position = 0;
+        foreach(Item item in newItemList)
+        {
+                Debug.LogWarning("add non usable");
+            if (item.data.itemType == GlobalClass.ItemType.NonUsable)
+            {
+                itemList.Add(item);
+                item.position = position;
+                position++;
+            }
+        }
+        foreach (Item item in newItemList)
+        {
+            if (item.data.itemType == GlobalClass.ItemType.Usable)
+            {
+                itemList.Add(item);
+                item.position = position;
+                position++;
+            }
+        }
+        foreach (Item item in newItemList)
+        {
+            if (item.data.itemType != GlobalClass.ItemType.NonUsable || item.data.itemType != GlobalClass.ItemType.Usable)
+            {
+                itemList.Add(item);
+                item.position = position;
+                position++;
+            }
+        }
+        Debug.Log(position);
+        
         OnItemListChanged?.Invoke(this, EventArgs.Empty);
     }
     public void AddItemById(int id) => AddItemById(id, 1);
