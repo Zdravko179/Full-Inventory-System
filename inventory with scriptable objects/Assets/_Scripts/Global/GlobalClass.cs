@@ -13,20 +13,4 @@ public class GlobalClass : MonoBehaviour
         NonUsable
     }
     public static ItemType itemType;
-
-    public static Inventory inventory;
-    public static Item item;
-    public static bool dragging;
-
-    public static bool movedFromInventory;
-    //public static EquipSlotUI equipSlot;
-
-    private void Awake()
-    {
-        inventory = null;
-        item = null;
-        dragging = false;
-
-        movedFromInventory = true;
-    }
 }

@@ -11,21 +11,21 @@ public abstract class SlotUI : MonoBehaviour, IPointerDownHandler, IPointerEnter
     protected static Equipment fromEquipment = null; 
 
 
-    public abstract void StartDrag(); public abstract void EndDrag(); protected abstract void DropItem();
+    public abstract void StartDrag(); public abstract void EndDrag(); protected abstract void DropItem(); public abstract void EquipUnequip();
     public abstract void ConsumeItem();
     public void OnPointerDown(PointerEventData eventData)
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            if (!GlobalClass.dragging) //start drag
+            if (!DraggedItem.dragging) //start drag
             {
                 if (item == null) return;
 
                 itemUI = transform.GetChild(0).gameObject;
                 itemUI.GetComponent<Image>().color = new Color(1, 1, 1, 0.2f);
 
-                GlobalClass.item = item;
-                GlobalClass.dragging = true;
+                DraggedItem.item = item;
+                DraggedItem.dragging = true;
 
                 DraggedItem.Instance.Activate(item.data.sprite);
 
@@ -35,7 +35,7 @@ public abstract class SlotUI : MonoBehaviour, IPointerDownHandler, IPointerEnter
             {
                 if (itemUI != null) itemUI.GetComponent<Image>().color = new Color(1, 1, 1, 1);
 
-                GlobalClass.dragging = false;
+                DraggedItem.dragging = false;
 
                 DraggedItem.Instance.Deactivate();
 
@@ -43,16 +43,22 @@ public abstract class SlotUI : MonoBehaviour, IPointerDownHandler, IPointerEnter
             }
         }
 
-        if (GlobalClass.dragging) return;
+        if (DraggedItem.dragging || item == null) return;
 
-        if (Input.GetKey(KeyCode.LeftControl) && eventData.button == PointerEventData.InputButton.Right)
+        if (Input.GetKey(KeyCode.LeftControl) && eventData.button == PointerEventData.InputButton.Right) //drop item
         {
-            if (item == null) return;
+            SpawnItemWorld.Instance.DropItem(item);
             DropItem();
             Tooltip.Instance.Deactivate();
         }
 
-        if (eventData.button == PointerEventData.InputButton.Middle)
+        else if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            EquipUnequip();
+            Tooltip.Instance.Deactivate();
+        }
+
+        else if (eventData.button == PointerEventData.InputButton.Middle) //consume item
         {
             if (item.data.itemType == GlobalClass.ItemType.Usable)
             {
@@ -67,11 +73,11 @@ public abstract class SlotUI : MonoBehaviour, IPointerDownHandler, IPointerEnter
     }
     void CancelDrag()
     {
-        if (GlobalClass.dragging && GlobalClass.item != null) //cancel dragging on right click
+        if (DraggedItem.dragging && DraggedItem.item != null) //cancel dragging on right click
         {
             if (itemUI != null) itemUI.GetComponent<Image>().color = new Color(1, 1, 1, 1);
             DraggedItem.Instance.Deactivate();
-            GlobalClass.dragging = false;
+            DraggedItem.dragging = false;
         }
     }
 

@@ -5,18 +5,16 @@ using UnityEngine.UI;
 
 public class EquipSlotUI : SlotUI
 {
-    public class OnItemDropedEventArgs : EventArgs
-    {
-        public Item item;
-    }
-
-    public Sprite placeholder;
+    //public Sprite placeholder;
     public GlobalClass.ItemType slotType;
 
-    public Equipment equipment;
+    public Equipment equipment; //try make this private
+    Inventory inventory;
 
-    //public Image image;
-    //Color placeholderColor;
+    private void Awake()
+    {
+        inventory = FindObjectOfType<PlayerInventory>().inventory;
+    }
 
 
     public void SetEquipment(Equipment equipment) => this.equipment = equipment;
@@ -28,11 +26,11 @@ public class EquipSlotUI : SlotUI
     }
     public override void EndDrag() 
     {
-        if (slotType == GlobalClass.item.data.itemType)
+        if (slotType == DraggedItem.item.data.itemType)
         {
-            if (fromInventory != null) fromInventory.RemoveItem(GlobalClass.item);
-            equipment.Equip(GlobalClass.item);
-            item = GlobalClass.item;
+            if (fromInventory != null) fromInventory.RemoveItem(DraggedItem.item);
+            equipment.Equip(DraggedItem.item);
+            item = DraggedItem.item;
         }
     }
     protected override void DropItem()
@@ -40,4 +38,11 @@ public class EquipSlotUI : SlotUI
         equipment.Unequip(item);
     }
     public override void ConsumeItem() {}
+
+    public override void EquipUnequip()
+    {
+        if (inventory.InventoryFull()) return;
+        inventory.AddItemById(item.data.id);
+        equipment.Unequip(item);
+    }
 }

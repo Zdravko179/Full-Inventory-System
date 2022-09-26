@@ -6,12 +6,12 @@ using DG.Tweening;
 public class ButtonsUI : MonoBehaviour
 {
     [SerializeField] private GameObject inventory, equipment, stats;
-    Player player;
+    PlayerInventory player;
 
-    public void SetPlayer(Player player) => this.player = player;
+    public void SetPlayer(PlayerInventory player) => this.player = player;
    
     public void _SortItems() {
-        player.inventory.SortItems();
+        player.inventory.SortItemsByType();
     }
 
     private void Update()

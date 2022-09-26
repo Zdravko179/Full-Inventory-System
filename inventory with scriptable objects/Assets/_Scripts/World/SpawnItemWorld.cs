@@ -24,7 +24,7 @@ public class SpawnItemWorld : MonoBehaviour
             {
                 ItemWorld newItem = SpanwNewItem();
                 newItem.id = Random.Range(0, ItemDatabase.Instance.itemDatas.Length);
-                newItem.ammount = Random.Range(0, 10);
+                newItem.ammount = Random.Range(1, 11);
             }
         }
     }

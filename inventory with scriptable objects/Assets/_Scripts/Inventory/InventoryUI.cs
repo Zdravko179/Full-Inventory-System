@@ -28,12 +28,12 @@ public class InventoryUI : MonoBehaviour
     private void OnItemListChanged(object sender, EventArgs e) => RefreshInventory();
     public void OnEnableRefresh()
     {
-        if (GlobalClass.dragging)
+        if (DraggedItem.dragging)
         {
             RefreshInventory();
             DraggedItem.Instance.Deactivate();
             Tooltip.Instance.Deactivate();
-            GlobalClass.dragging = false;
+            DraggedItem.dragging = false;
         }
     }
 
@@ -60,6 +60,7 @@ public class InventoryUI : MonoBehaviour
                 if (item.position == i)
                 {
                     slotUI.GetComponent<SlotUI>().item = item;
+                    slotUI.GetComponent<Image>().color = GetAmmountColor(slotUI.GetComponent<SlotUI>().item);
                     GameObject instanceItem = Instantiate(pfItem, slotUI.transform);
 
                     instanceItem.GetComponent<Image>().sprite = item.data.sprite;
@@ -87,7 +88,6 @@ public class InventoryUI : MonoBehaviour
                 int otherEmptySlots = 0;
                 for(int j=i-1; j>=0; j--) //check if any more empty slots
                 {
-                    //Debug.Log("check " + j);
                     if (slotsUI[j].GetComponent<SlotUI>().item == null) otherEmptySlots++;
                 }
 
@@ -102,5 +102,11 @@ public class InventoryUI : MonoBehaviour
                 otherEmptySlots = 0;
             }
         }
+    }
+    Color GetAmmountColor(Item item)
+    {
+        float percentage = ((float)item.ammount / (float)item.data.stackLimit);
+        Color color = new Color(0f, 1f, 1 - percentage);
+        return color;
     }
 }

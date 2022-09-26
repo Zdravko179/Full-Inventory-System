@@ -28,12 +28,12 @@ public class EquipUI : MonoBehaviour
     private void OnItemListChanged(object sender, EventArgs e) => RefreshEquipment();
     public void OnEnableRefresh()
     {
-        if (GlobalClass.dragging)
+        if (DraggedItem.dragging)
         {
             RefreshEquipment();
             DraggedItem.Instance.Deactivate();
             Tooltip.Instance.Deactivate();
-            GlobalClass.dragging = false;
+            DraggedItem.dragging = false;
         }
     }
 

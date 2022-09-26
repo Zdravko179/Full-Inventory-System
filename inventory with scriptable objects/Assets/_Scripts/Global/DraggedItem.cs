@@ -6,10 +6,18 @@ public class DraggedItem : MonoBehaviour
 {
     public static DraggedItem Instance;
     Image image;
+
+    public static Item item;
+    public static bool dragging;
+
+
     private void Awake()
     {
         Instance = this;
         image = GetComponent<Image>();
+
+        item = null;
+        dragging = false;
     }
     private void Start()
     {
