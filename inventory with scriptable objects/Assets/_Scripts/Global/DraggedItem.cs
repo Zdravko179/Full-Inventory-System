@@ -15,6 +15,8 @@ public class DraggedItem : MonoBehaviour
     public Equipment equipment = null;
     public static bool dragging;
 
+    public static int draggedSlotIndex;
+
 
     private void Awake()
     {
@@ -31,23 +33,9 @@ public class DraggedItem : MonoBehaviour
     void Update()
     {
         transform.position = Input.mousePosition;
-        if (Input.GetMouseButtonDown(0)) DropItemOnMouseClick();
+        //if (Input.GetMouseButtonDown(0)) DropItemOnMouseClick();
     }
-    void DropItemOnMouseClick()
-    {
-        if (item == null) return;
-        if (!dragging) return;
-        if (EventSystem.current.IsPointerOverGameObject()) return; //continue if not over UI
 
-        SpawnItemWorld.Instance.DropItem(item);
-
-        if (inventory != null) inventory.RemoveItem(item);
-        if (equipment != null) equipment.Unequip(item);
-
-        item = null;
-        dragging = false;
-        Deactivate();
-    }
     public void Activate(Item item, Inventory inventory)
     {
         Activate(item, inventory, null);
@@ -65,19 +53,24 @@ public class DraggedItem : MonoBehaviour
         this.inventory = inventory;
         this.equipment = equipment;
     }
-    IEnumerator ActivateAnimation()
-    {
-        yield return new WaitForSeconds(1);
-
-    }
     public void Deactivate()
     {
         if (image == null) return;
         image.color = new Color(1, 1, 1, 0);
-        Debug.Log("Deactivate");
     }
-    IEnumerator DectivateAnimation()
+
+    void DropItemOnMouseClick()
     {
-        yield return new WaitForSeconds(1);
+        if (item == null) return;
+        if (!dragging) return;
+        if (EventSystem.current.IsPointerOverGameObject()) return; //continue if not over UI
+        
+        if (inventory != null) inventory.RemoveItem(item);
+        if (equipment != null) equipment.Unequip(item);
+
+        SpawnItemWorld.Instance.DropItem(item);
+        Deactivate();
+        //item = null;
+        dragging = false;
     }
 }

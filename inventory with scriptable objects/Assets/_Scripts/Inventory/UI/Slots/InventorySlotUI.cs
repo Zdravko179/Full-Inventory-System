@@ -5,7 +5,7 @@ using UnityEngine;
 public class InventorySlotUI : SlotUI
 {
     public int slotIndex;
-    static int draggedSlotIndex;
+    //static int draggedSlotIndex;
 
     Inventory inventory;
     Equipment equipment;
@@ -19,7 +19,7 @@ public class InventorySlotUI : SlotUI
     public void SetInventory(Inventory inventory) => this.inventory = inventory;
     public override void StartDrag()
     {
-        draggedSlotIndex = slotIndex;
+        DraggedItem.draggedSlotIndex = slotIndex;
 
         fromInventory = inventory;
         fromEquipment = null;
@@ -47,7 +47,7 @@ public class InventorySlotUI : SlotUI
             if (fromInventory != null)
             {
                 Item thisItem = inventory.RemoveItem(item);
-                inventory.AddItemAt(thisItem, draggedSlotIndex);
+                inventory.AddItemAt(thisItem, DraggedItem.draggedSlotIndex);
 
                 inventory.RemoveItem(DraggedItem.item);
                 inventory.AddItemAt(DraggedItem.item, slotIndex);
@@ -65,8 +65,31 @@ public class InventorySlotUI : SlotUI
 
     public override void EquipUnequip()
     {
-        if (item.data.itemType == GlobalClass.ItemType.Helmet || item.data.itemType == GlobalClass.ItemType.BodyArmour || item.data.itemType == GlobalClass.ItemType.Gauntlet || item.data.itemType == GlobalClass.ItemType.Accesory)
+        if (item.data.itemType == GlobalClass.ItemType.Helmet || item.data.itemType == GlobalClass.ItemType.BodyArmour || 
+            item.data.itemType == GlobalClass.ItemType.Gauntlet || item.data.itemType == GlobalClass.ItemType.Accesory)
         {
+            //DraggedItem.item = item;
+            //DraggedItem.draggedSlotIndex = slotIndex;
+            switch (item.data.itemType)
+            {
+                case GlobalClass.ItemType.Helmet:
+                    if (FindObjectOfType<PlayerInventory>().equipment.head != null) 
+                        inventory.AddItemAt(FindObjectOfType<PlayerInventory>().equipment.head, slotIndex);
+                    break;
+                case GlobalClass.ItemType.BodyArmour:
+                    if (FindObjectOfType<PlayerInventory>().equipment.body != null)
+                        inventory.AddItemAt(FindObjectOfType<PlayerInventory>().equipment.head, slotIndex);
+                    break;
+                case GlobalClass.ItemType.Gauntlet:
+                    if (FindObjectOfType<PlayerInventory>().equipment.hands != null)
+                        inventory.AddItemAt(FindObjectOfType<PlayerInventory>().equipment.head, slotIndex);
+                    break;
+                case GlobalClass.ItemType.Accesory:
+                    if (FindObjectOfType<PlayerInventory>().equipment.accesory != null)
+                        inventory.AddItemAt(FindObjectOfType<PlayerInventory>().equipment.head, slotIndex);
+                    break;
+            }
+
             equipment.Equip(item);
             inventory.RemoveItem(item);
         }

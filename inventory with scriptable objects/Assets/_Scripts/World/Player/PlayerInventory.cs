@@ -1,4 +1,7 @@
+using System;
 using UnityEngine;
+using DG.Tweening;
+using System.Collections;
 
 public class PlayerInventory : MonoBehaviour
 {
@@ -23,15 +26,21 @@ public class PlayerInventory : MonoBehaviour
 
     private void Start()
     {
-        inventory.AddItemById(2, 3);
-        inventory.AddItemById(6, 6);
-        inventory.AddItemById(3, 6);
-        inventory.AddItemById(6, 6);
-        inventory.AddItemById(2, 100);
-        inventory.AddItemById(2, 100);
-        inventory.AddItemById(2, 100);
-        inventory.AddItemById(4, 1);
-        inventory.AddItemById(4, 1);
-        inventory.AddItemById(4, 1);
+        for (int i = 0; i < ItemDatabase.Instance.itemDatas.Length; i++)
+        {
+            inventory.AddItemById(i);
+        }
+        inventory.PermaUpgrade += PermaUpgrade;
+    }
+    private void PermaUpgrade(object sender, EventArgs e)
+    {
+        Color pink = new Color(1, 0, 1);
+        GetComponent<SpriteRenderer>().DOColor(pink, .1f).SetLoops(4, LoopType.Yoyo);
+        StartCoroutine(RevertColor());
+    }
+    IEnumerator RevertColor()
+    {
+        yield return new WaitForSeconds(2f);
+        GetComponent<SpriteRenderer>().color = Color.white;
     }
 }

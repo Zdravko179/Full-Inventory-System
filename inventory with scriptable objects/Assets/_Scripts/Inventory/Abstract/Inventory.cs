@@ -8,6 +8,7 @@ public class Inventory
     private List<Item> itemList = new List<Item>();
     private List<Item> permaItemList = new List<Item>();
     public event EventHandler OnItemListChanged;
+    public event EventHandler PermaUpgrade;
 
 
     public List<Item> GetItemList()
@@ -69,6 +70,7 @@ public class Inventory
         {
             if (itemWorld != null) itemWorld.UpdateItem(0);
             Debug.Log("Permanent player update");
+            PermaUpgrade?.Invoke(this, EventArgs.Empty);
             return;
         }
         //1.fill existing stacks

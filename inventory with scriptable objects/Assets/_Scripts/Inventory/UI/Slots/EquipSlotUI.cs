@@ -30,6 +30,8 @@ public class EquipSlotUI : SlotUI
     {
         if (slotType == DraggedItem.item.data.itemType)
         {
+            if (item != null) inventory.AddItemAt(item, DraggedItem.draggedSlotIndex);
+
             if (fromInventory != null) fromInventory.RemoveItem(DraggedItem.item);
             equipment.Equip(DraggedItem.item);
             item = DraggedItem.item;
