@@ -23,6 +23,8 @@ public class EquipSlotUI : SlotUI
     {
         fromInventory = null;
         fromEquipment = equipment;
+
+        DraggedItem.Instance.Activate(item, equipment);
     }
     public override void EndDrag() 
     {

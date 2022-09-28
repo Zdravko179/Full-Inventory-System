@@ -18,6 +18,7 @@ public class PlayerInventory : MonoBehaviour
         equipmentUI.SetEquipment(equipment);
         statsUI.SetEquipment(equipment);
         buttons.SetPlayer(this);
+        GetComponent<ItemPickUp>().SetInventory(inventory);
     }
 
     private void Start()
@@ -32,17 +33,5 @@ public class PlayerInventory : MonoBehaviour
         inventory.AddItemById(4, 1);
         inventory.AddItemById(4, 1);
         inventory.AddItemById(4, 1);
-    }
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.GetComponent<ItemWorld>() != null)
-        {
-            PickUpItem(collision);
-        }
-    }
-    void PickUpItem(Collider2D collision)
-    {
-        ItemWorld itemWorld = collision.GetComponent<ItemWorld>();
-        inventory.AddItemById(itemWorld.id, itemWorld.ammount, itemWorld);
     }
 }

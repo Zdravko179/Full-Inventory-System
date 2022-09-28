@@ -13,7 +13,7 @@ public class ItemDatabase : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        itemDatas = Resources.LoadAll("Items", typeof(ScriptableObject));
+        itemDatas = Resources.LoadAll("soItems", typeof(ScriptableObject));
         ConstructItemDatabase();
         foreach (Object itemData in itemDatas)
         {
