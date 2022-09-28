@@ -1,11 +1,14 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using System.Linq;
 
 public class Inventory
 {
     private List<Item> itemList = new List<Item>();
+    private List<Item> permaItemList = new List<Item>();
     public event EventHandler OnItemListChanged;
+    public event EventHandler PermaUpgrade;
 
 
     public List<Item> GetItemList()
@@ -24,6 +27,7 @@ public class Inventory
         {
             newItemList.Add(item);
         }
+        newItemList = newItemList.OrderBy(item => item.data.id).ToList();
         itemList.Clear();
 
         int position = 0;
@@ -61,6 +65,14 @@ public class Inventory
     public void AddItemById(int id, int ammount) => AddItemById(id, ammount, null);
     public void AddItemById(int id, int ammount, ItemWorld itemWorld)
     {
+        //0.permanent upgrade item does not go in inventory
+        if (ItemDatabase.Instance.FetchItemById(id).goesInInventory == false)
+        {
+            if (itemWorld != null) itemWorld.UpdateItem(0);
+            Debug.Log("Permanent player update");
+            PermaUpgrade?.Invoke(this, EventArgs.Empty);
+            return;
+        }
         //1.fill existing stacks
         foreach (Item item in itemList)
         {

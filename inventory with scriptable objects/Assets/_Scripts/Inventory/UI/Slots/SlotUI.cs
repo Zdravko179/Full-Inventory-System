@@ -27,7 +27,7 @@ public abstract class SlotUI : MonoBehaviour, IPointerDownHandler, IPointerEnter
                 DraggedItem.item = item;
                 DraggedItem.dragging = true;
 
-                DraggedItem.Instance.Activate(item.data.sprite);
+                
 
                 StartDrag();
             }

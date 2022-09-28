@@ -25,10 +25,8 @@ public class PlayerMovement : MonoBehaviour
     {
         float x = Input.GetAxisRaw("Horizontal");
         float y = Input.GetAxisRaw("Vertical");
-        Vector3 movDir = new Vector3(x, y, 0).normalized;
-
-        rb.velocity = movDir * speed * Time.deltaTime;
-
+        movDir = new Vector3(x, y, 0).normalized;
+        
         if (movDir.y > 0.01f) an.Play("Up");
         else if (movDir.y < -0.01f) an.Play("Down");
         else if (movDir.x > 0.01f) an.Play("Right");
@@ -37,6 +35,6 @@ public class PlayerMovement : MonoBehaviour
     }
     private void FixedUpdate()
     {
-
+        rb.velocity = movDir * speed * Time.fixedDeltaTime;
     }
 }

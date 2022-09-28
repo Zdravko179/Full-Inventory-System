@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SpawnItemWorld : MonoBehaviour
@@ -19,7 +17,7 @@ public class SpawnItemWorld : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            int ammount = 5;
+            int ammount = 3;
             for (int i = 0; i < ammount; i++)
             {
                 ItemWorld newItem = SpanwNewItem();

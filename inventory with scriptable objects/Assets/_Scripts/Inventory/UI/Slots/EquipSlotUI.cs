@@ -23,11 +23,15 @@ public class EquipSlotUI : SlotUI
     {
         fromInventory = null;
         fromEquipment = equipment;
+
+        DraggedItem.Instance.Activate(item, equipment);
     }
     public override void EndDrag() 
     {
         if (slotType == DraggedItem.item.data.itemType)
         {
+            if (item != null) inventory.AddItemAt(item, DraggedItem.draggedSlotIndex);
+
             if (fromInventory != null) fromInventory.RemoveItem(DraggedItem.item);
             equipment.Equip(DraggedItem.item);
             item = DraggedItem.item;
